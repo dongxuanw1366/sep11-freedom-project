@@ -75,10 +75,23 @@ This was one of the code I saw in the tutorial page and just from looking at thi
 
 
 
-10/29/23:
+11/05/23:
 * Today I am still learning the basics of Phaser but I didn't do much today since I am just exploring the foundations.
 * I went to yesterday's example code and documentation again and learn the function of `type`. `type` is to set the redering context of your game.
 * I also tried exploring on another [Phaser Tutorial Website](https://phaser.io/tutorials/making-your-first-phaser-3-game/part1). In this website I learned what `preload` and `create` do. You can use `preload` to store your image or sprites, its basically where you load your assents hence the name preload. And of course as you can tell by the name `create` is what you use to create your game which is where you put the basic codes in.
+
+
+11/13/23
+* I learned that `this.add.image` is used to create new Image Game Object which is a very essential part of phaser because you need a game object for any game or it would just be the background.
+* `this.` is very powerful it can be used to add physics and text.
+* I followed an example and learned how to add and create a score board. This would help me with my clicker game because I need a way to earn points after clciking on something.
+* I tried to create a score board and its not that hard. You just have to create two variables that serves as the global scope. One called score and one called scoreText. Then you set the score to 0 and you can start using the two variable in your function. I learned that you can make the score increase or decrease after you do something and then you use this code `scoreText.setText('Score: ' + score);` to create a score text that would change as you add score.
+
+
+
+
+
+
 
 
 
