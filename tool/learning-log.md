@@ -6,7 +6,7 @@ Project: **Clicker Game**
 
 ---
 
-10/28/23:
+10/29/23:
 * This is the first [youtube video](https://www.youtube.com/watch?v=hI_LS8bdkM4) I tried and it teached me how to start the set up with phaser. I didn't finish the whole video yet because all I really wanted to know for know is how to start
 * I tried my first test with the cdn. I saw some tutorial using npm but it was too confusing for me so I decided to try the cdn method which is way easier since all you have to do is put the script in the head of the code.
 * After I am done setting everything up I needed to learn what to do next so I went on the [Phaser website](https://phaser.io/tutorials/getting-started-phaser3/part5) to learn the basic codes of Phaser. As shown below:
@@ -81,15 +81,42 @@ This was one of the code I saw in the tutorial page and just from looking at thi
 * I also tried exploring on another [Phaser Tutorial Website](https://phaser.io/tutorials/making-your-first-phaser-3-game/part1). In this website I learned what `preload` and `create` do. You can use `preload` to store your image or sprites, its basically where you load your assents hence the name preload. And of course as you can tell by the name `create` is what you use to create your game which is where you put the basic codes in.
 
 
-11/13/23
+11/12/23
 * I learned that `this.add.image` is used to create new Image Game Object which is a very essential part of phaser because you need a game object for any game or it would just be the background.
 * `this.` is very powerful it can be used to add physics and text.
 * I followed an example and learned how to add and create a score board. This would help me with my clicker game because I need a way to earn points after clciking on something.
 * I tried to create a score board and its not that hard. You just have to create two variables that serves as the global scope. One called score and one called scoreText. Then you set the score to 0 and you can start using the two variable in your function. I learned that you can make the score increase or decrease after you do something and then you use this code `scoreText.setText('Score: ' + score);` to create a score text that would change as you add score.
 
 
+11/19/23
+* Today I am learning about a new variable called `player`. This basically allows you create a sprite or chracter that can move or be interacted with in game.
+```js
+player = this.physics.add.sprite(100, 450, 'dude');
 
+player.setBounce(0.2);
+player.setCollideWorldBounds(true);
 
+this.anims.create({
+    key: 'left',
+    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+});
+
+this.anims.create({
+    key: 'turn',
+    frames: [ { key: 'dude', frame: 4 } ],
+    frameRate: 20
+});
+
+this.anims.create({
+    key: 'right',
+    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1
+});
+```
+* I tinkered with this code today and it teached me many things. `player = this.physics.add.sprite(100, 450, 'dude')` adds a new sprite called player positioned at 100 x 450 pixels from the bottom of the game. By tinkering with this code it allows me to modify the starting sprite position. Then I learned how to use the this.anims.create function. I think what this functions does is to create a set of animation that I can use to make my sprite move and this is very important when making a game because almost every game needs a moving character.
 
 
 
