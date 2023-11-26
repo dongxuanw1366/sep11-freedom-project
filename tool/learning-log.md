@@ -119,6 +119,42 @@ this.anims.create({
 * I tinkered with this code today and it teached me many things. `player = this.physics.add.sprite(100, 450, 'dude')` adds a new sprite called player positioned at 100 x 450 pixels from the bottom of the game. By tinkering with this code it allows me to modify the starting sprite position. Then I learned how to use the this.anims.create function. I think what this functions does is to create a set of animation that I can use to make my sprite move and this is very important when making a game because almost every game needs a moving character.
 
 
+11/26/23
+* Today I am learning about keyboard controls which is essential for any game.
+* I looked through the documentations and saw that there are ways to manipulate your player using this function `cursors = this.input.keyboard.createCursorKeys();`. This populates the cursors object with four properties: up, down, left, right, that are all instances of Key objects.
+
+Then I tinkered with this set of code from the [documentation](https://phaser.io/tutorials/making-your-first-phaser-3-game/part7):
+```js
+if (cursors.left.isDown)
+{
+    player.setVelocityX(-160);
+
+    player.anims.play('left', true);
+}
+else if (cursors.right.isDown)
+{
+    player.setVelocityX(160);
+
+    player.anims.play('right', true);
+}
+else
+{
+    player.setVelocityX(0);
+
+    player.anims.play('turn');
+}
+
+if (cursors.up.isDown && player.body.touching.down)
+{
+    player.setVelocityY(-330);
+}
+```
+I think this code is just a set of if/else statements basically if you hold down the left arrow then the character moves toward the left and if you hold down the right arrow you would move to the right. If you aren't pressing any key the velocity would be set to 0 meaning you would stop moving. By tinkering with the numbers I can changed how fast the character is moving in one direction. Later on this function can be modified to something more advance, I think by changing the code inside the if statements can change what the character would do after pressing a key.
+
+
+
+
+
 
 
 
