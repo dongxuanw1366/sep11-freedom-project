@@ -153,6 +153,18 @@ I think this code is just a set of if/else statements basically if you hold down
 
 
 
+12/3/23
+* Today I was learning how to make a scoreboard which can be quite helpful for me because I need to have a kind of socre board to keep track on the amount of points they earned by clicking and there was a tutorial for it in the phaser [website](https://phaser.io/tutorials/making-your-first-phaser-3-game/part9).
+* You can make text game objects like this:
+```js
+var score = 0;
+var scoreText;
+```
+Then you put this set of code in the create function `scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });` This would essentially create a score display on the coordinate of 16 x 16. The font-size: 32px and fill is for the size of the text and the color, respectively. You can also change the font size but if you don't specify it then it would be Courier.
+
+I tried to tinker with it and I realized that you can change the postion of the score board and color and the font. Then you can create object or actions for the player to do and that would either increase or decrease the point by simply doing something like "if player touches this: (insert something)" then `score += 2`, of course you can change how much points they get.
+
+
 
 
 
