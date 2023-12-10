@@ -166,6 +166,22 @@ I tried to tinker with it and I realized that you can change the postion of the 
 
 
 
+12/10/23
+* Today I went to research on the [Phaser API Documentations](https://newdocs.phaser.io/docs/3.60.0/Phaser.Input.InputManager#events). In here I learned how to use input managers. These are very important because I need to make my object clickable or it wouldn't be a clicker game.
+
+`this.input.on('pointerdown', onClick);` This line of code helps me create a click event. Now when the player clicks anywhere on the game screen, the onClick function is triggered. Then I will apply this to my object or upgrade button to help increase the score I earn from clicking.
+
+```js
+function onClick() {
+    // Increase the score based on the click multiplier
+    score += 1 * clickMultiplier;
+    scoreText.setText('Score: ' + score); // update the score
+}
+```
+
+
+
+
 
 
 
