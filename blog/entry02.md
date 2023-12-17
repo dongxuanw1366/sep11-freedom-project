@@ -1,5 +1,5 @@
 # Entry 2
-##### X/X/XX
+##### 12/16/23
 
 After I selected my code which is Phaser, I needed to start learning Phaser and move on from just the basics. This meant that I tried to learn something more advanced. One thing I tried to learn was keyboard controls which is essential for many game because everyone loves shortcut keys when you are playing a game. Then you can either use these keyboard controls to manipulate your character or call "functions" to run in the game. I tried to understand how to do keyboard controls by looking at a tutorial on the [phaser website](https://phaser.io/tutorials/making-your-first-phaser-3-game/part7). In the tutorial I learned this function: `cursors = this.input.keyboard.createCursorKeys();` which creates the cursor keys. Then I tried to tinker with the following code which is this:
 ```js
@@ -46,7 +46,7 @@ My freedom project goal for this Chrismas is to learn my tool even further by le
 
 Currently, I am on step 2 and 3 of the **Engineer Design Process**. I am still researching on how to create my Phaser game and I am also brainstorming on what I can make and add to this clicker game. During my winter break I will research on Phaser and think of things I can do to make my clicker game more entertaining and more interesting. I have to make up plans on what I can do and slowly come up with the best one.
 
-The skills I used during this period of time are **how to google**, **consideration** and **problem decomposition**. I used how to google to help me find documentations and sources for me to learn phaser and gain ideas on what to do for my freedom project. I used consideration to make sure what I should add into my game to make the game fun and interactive. I also used problem decomposition to breakdown my project into parts so I know what I should start first and what how I should create my game step by step. The parts of my project are probably going to be the base, game object and upgrades. 
+The skills I used during this period of time are **how to google**, **consideration** and **problem decomposition**. I used how to google to help me find documentations and sources for me to learn phaser and gain ideas on what to do for my freedom project. I used consideration to make sure what I should add into my game to make the game fun and interactive. I also used problem decomposition to breakdown my project into parts so I know what I should start first and what how I should create my game step by step. The parts of my project are probably going to be the base, game object and upgrades.
 
 [Previous](entry01.md) | [Next](entry03.md)
 
