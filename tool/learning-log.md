@@ -179,7 +179,27 @@ function onClick() {
 }
 ```
 
+12/17/23
+* Today I tried to learn animations on the [Phaser 3 Doc](https://photonstorm.github.io/phaser3-docs/Phaser.Animations.Events.html#event:ADD_ANIMATION).
+* The add animation event is dispatched when a new animation is added to the global Animation Manager. These animations can be applied to your character or your game objects. I also learned that you can combine phaser animations with the input manager I learned last week, so you can trigger an animation everytime you click.
+* I learned the tweens class on the [Phaser documentation](https://photonstorm.github.io/phaser3-docs/Phaser.Tweens.Tween.html) for classes and it is a powerful class added in phaser that helps you create animations. A Tween is able to manipulate the properties of one or more objects to any given value, based on a duration and type of ease.
 
+```js
+// play a scale up animation on the clickableObject
+this.tweens.add({ // creates and manage tweens (animations)
+    targets: clickableObject, //specify the target so the animation is only applied to this target
+    duration: 200, // how long in milliseconds
+    // target scaling
+    scaleX: 1,
+    scaleY: 1,
+    onComplete: () => {
+        // Increase the score based on the click multiplier
+        score += 1 * clickMultiplier;
+        scoreText.setText('Score: ' + score);
+    }
+});
+```
+I made this function after reading the documentation which adds a tween to the tween manager and runs a scale up animation to the clickable object.
 
 
 
