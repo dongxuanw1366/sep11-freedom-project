@@ -206,6 +206,39 @@ I made this function after reading the documentation which adds a tween to the t
 
 
 
+1/7/24:
+* Today I went to research on animations for my Clicker game and I learned that animations is hard because you have to understand a lot of concepts. The basic animation for phaser is to create an animation event for a sprite and this can be added to the global animation manager.
+* This is the animation flow for Phaser:
+    * ANIMATION_START
+    * ANIMATION_UPDATE (repeated for however many frames the animation has)
+    * ANIMATION_REPEAT (only if the animation is set to repeat, it then emits more update events after this)
+    * ANIMATION_COMPLETE (only if there is a finite, or zero, repeat count)
+    * ANIMATION_COMPLETE_KEY (only if there is a finite, or zero, repeat count)
+* I learned that you need to specify the key, the frames and the frame rate of the animation.
+* First, I need to create a sprite, then I just add the animation and play it with `sprite.anims.play`.
+```js
+this.load.spritesheet('test', 'assets/clickingObject.png', { frameWidth: 64, frameHeight: 64 });
+
+// Create a sprite in the create function
+var test = this.add.sprite(400, 300, 'test`);
+
+// Add the animation to the sprite
+this.anims.create({
+    key: 'click',
+    frames: this.anims.generateFrameNumbers('test', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: 0
+});
+
+// Play the animation on the sprite when it is clicked
+test.setInteractive();
+test.on('pointerdown', function () {
+    test.anims.play('click');
+});
+```
+* This code just generates an animation on my testing clicking object when I click it. However, I didn't specify any animation yet.
+
+
 <!--
 * Links you used today (websites, videos, etc)
 * Things you tried, progress you made, etc
