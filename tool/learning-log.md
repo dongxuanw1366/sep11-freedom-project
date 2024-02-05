@@ -206,7 +206,7 @@ I made this function after reading the documentation which adds a tween to the t
 
 
 
-1/21/24:
+2/4/24:
 * Today I went to research on animations for my Clicker game and I learned that animations is hard because you have to understand a lot of concepts. The basic animation for phaser is to create an animation event for a sprite and this can be added to the global animation manager.
 * This is the animation flow for Phaser:
     * ANIMATION_START
@@ -237,6 +237,10 @@ test.on('pointerdown', function () {
 });
 ```
 * This code just generates an animation on my testing clicking object when I click it. However, I didn't specify any animation yet.
+
+
+
+
 
 
 <!--
