@@ -1,5 +1,5 @@
 # Entry 3
-##### 2/5/24
+##### 2/11/24
 
 After learning the basics and tutorials of Phaser, I decided to move on and study more on things that will help me make my clicker game. Somethings I learned were animation and tweens. During this time I also started to create a bit of a start for my clicker game.
 
