@@ -240,6 +240,36 @@ test.on('pointerdown', function () {
 
 
 
+2/11/24
+* Today I tried to learn local storage in Javascript because I feel like I have most of the basics done at this point. I wanted to create upgrades that can make it so that the game can click the game object by itself
+* This meant that I had to learn about the phaserTimer function
+* In Phaser, timers are used to schedule and manage recurring events, delays, and callbacks.
+* You can create a timer by using the `time` property and use the addEvent method to define the event or function with the parameter you want.
+```js
+ autoClickTimer = this.time.addEvent({
+        delay: 1000,  // Automatic click every 1000 milliseconds (1 second)
+        callback: autoClick,
+        callbackScope: this,
+        loop: true
+    });
+function autoClick() {
+        score += 1;
+        updateScoreText();
+    }
+```
+
+This is an autoClicker function I made and the parameters are simple:
+* `delay`: The time delay (in milliseconds) before the timer event is triggered.
+* `callback`: The function to be called when the timer event is triggered.
+* `callbackScope`: The scope in which the callback function will be executed.
+* `loop (optional)`: Set to true if you want the timer event to repeat indefinitely.
+
+I used loop because I want the autoclicker to continue the whole time.
+
+* You can cancel timer events like this: `timerEvent.remove();`
+
+
+
 
 
 
