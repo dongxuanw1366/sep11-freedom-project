@@ -268,8 +268,23 @@ I used loop because I want the autoclicker to continue the whole time.
 
 * You can cancel timer events like this: `timerEvent.remove();`
 
+3/3/24
+* Today I tried studying about [local storage](https://www.w3schools.com/jsref/prop_win_localstorage.asp). I learned that local storage is a simple web storage that allows your website to store data.
 
+* The localStorage object stores data with no expiration date.
 
+* The data is not deleted when the browser is closed, and are available for future sessions.
+
+* To use localStorage you would need a name and a value
+`localStorage.setItem('key', 'value');` This is how localStorage works. You need a key which is the name you will use when you want to retrieve your data and the value would be the data it stores.
+
+```js
+var storedValue = localStorage.getItem('key');
+console.log(storedValue);
+```
+You can then retrieve the data like this. The output of the console.log would just be "value".
+
+* If I can use this in my Clicker game then I can track the stats of players. Maybe how much times they have clicked.
 
 
 
