@@ -286,7 +286,31 @@ You can then retrieve the data like this. The output of the console.log would ju
 
 * If I can use this in my Clicker game then I can track the stats of players. Maybe how much times they have clicked.
 
+3/10/24
+* Today I continued learning about localStorage. Now I tried to learn what localStorage can do and what it is mostly used for.
+* localStorage is usually used to track user preferences and tacking interactions or status, like if they are logged in or not.
+```js
+if (localStorage.clickcount) {
+  localStorage.clickcount = Number(localStorage.clickcount) + 1;
+} else {
+  localStorage.clickcount = 1;
+}
+```
+This conditional can track how much times you clicked a button and it will not be resetted.
 
+```js
+localStorage.setItem('theme', 'dark');
+const userTheme = localStorage.getItem('theme');
+```
+This tracks what theme the user likes.
+
+```js
+localStorage.setItem('isLoggedIn', 'true');
+const isLoggedIn = localStorage.getItem('isLoggedIn');
+```
+This tracks if the user is logged in or not.
+
+After all of this studying I feel like local storage would help me with my clicker game because my game would have a relatively small amount of data.
 
 <!--
 * Links you used today (websites, videos, etc)
