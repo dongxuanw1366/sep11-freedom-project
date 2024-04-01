@@ -312,6 +312,20 @@ This tracks if the user is logged in or not.
 
 After all of this studying I feel like local storage would help me with my clicker game because my game would have a relatively small amount of data.
 
+
+4/1/24
+* I learned about math in Phaser today and there is a set of function that is related with math in Phaser
+* There's a series of functions that are related with math and they all start with `Phaser.Math`
+* `Phaser.Math.RND` provides ways of generating random numbers, integers, floats, and shuffling arrays.
+* `Phaser.Math.Clamp()` is like constrain in p5.js, it clamps a value within a specified range.
+* `Phaser.Math.SnapTo()` is a function for snapping a value to the nearest multiple of a specified increment.
+* `Phaser.Math.PI2` is just 2 pi in math.
+* The math functions listed above are functions I feel like that might be useful to know for my project since a game like mine would involve ways of using numbers.
+
+
+
+
+
 <!--
 * Links you used today (websites, videos, etc)
 * Things you tried, progress you made, etc
