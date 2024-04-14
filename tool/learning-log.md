@@ -323,7 +323,13 @@ After all of this studying I feel like local storage would help me with my click
 * The math functions listed above are functions I feel like that might be useful to know for my project since a game like mine would involve ways of using numbers.
 
 
-
+4/14/24
+* I learned about input handeling in phaser.js today.
+* There are simple Mouse and keyboard inputs and there are also advanced inputs like touch and game pad which Paser supports as a platform(I might consider trying touch input for my clicker game because it is still a way of clicking)
+* Then there are mouse input events in Phaser such as `pointerdown`, `pointerup`, `pointermove`, and `pointerover` and keyboard input events such as `keydown`, `keyup`, and `keypress`
+* There are also input zones in Phaser.js meaning that you can define your input zones and create specific areas that can receive specific inputs. This can be very helpful if you want different effects whenever you click a different area. Input zones can be static or dynamic, meaning they can be fixed in position or move with game objects.
+* There are global and object-specific input handelers so you can listen to events specifically for an object or have a global input handler that listens for any event on the game canvas.
+* There is also input groups in Phaser.js. Input groups allow you to manage multiple game objects as a single unit for input handling purposes.
 
 
 <!--
