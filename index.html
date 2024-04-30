@@ -49,6 +49,9 @@
             var button;
             var score = 0;
             var scoreText;
+            var upgradeSection;
+            var scoreMultiplier = 1;
+
 
             // Preload assets
             function preload() {
@@ -81,6 +84,28 @@
                     // Re-position the button when the window is resized
                     updateButtonPosition();
                 });
+
+
+
+                // Create upgrade section container
+                upgradeSection = this.add.container(game.config.width, 0);
+
+                // Create upgrade section background
+                var upgradeBackground = this.add.rectangle(0, 0, 200, game.config.height, 0x333333);
+                upgradeBackground.setOrigin(1, 0);
+                upgradeSection.add(upgradeBackground);
+
+                // Create upgrade section label
+                var upgradeLabel = this.add.text(-10, 20, 'Upgrade Section', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+                upgradeLabel.setOrigin(1, 0);
+                upgradeSection.add(upgradeLabel);
+
+                // Create upgrade buttons
+                var upgradeButton = this.add.text(-10, 100, 'Clicking Power\nUpgrade', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+                upgradeButton.setOrigin(1, 0);
+                upgradeButton.setInteractive();
+                upgradeButton.on('pointerdown', upgradeMultiplier);
+                upgradeSection.add(upgradeButton);
             }
 
             function updateButtonPosition() {
@@ -90,9 +115,16 @@
                 button.y = centerY;
             }
 
+            function upgradeMultiplier() {
+                // Increase score multiplier
+                scoreMultiplier++;
+                updateScoreText();
+            }
+
             function onClick() {
                 button.setScale(0.25);
-                score++;
+                // Increase score by the current multiplier
+                score += scoreMultiplier;
                 updateScoreText();
             }
 
