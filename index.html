@@ -47,6 +47,8 @@
 
             var game = new Phaser.Game(config);
             var button;
+            var score = 0;
+            var scoreText;
 
             // Preload assets
             function preload() {
@@ -60,18 +62,26 @@
                 button.setOrigin(0.5); // Set the origin to the center of the button
                 button.setScale(0.35);
 
-                // Position the button
+                // Position the button initially
                 updateButtonPosition();
 
                 // Add pointer events to the button
                 button.setInteractive();
                 button.on('pointerdown', onClick);
-            }
-                // Listen for window resize events
+                button.on('pointerup', onRelease);
+
+
+
+                 // Create scoreboard
+                scoreText = this.add.text(game.config.width / 2, button.y - button.displayHeight / 2 - 20, 'Score: 0', { fontFamily: 'Courier', fontSize: 50, color: '#ffffff' });
+                scoreText.setOrigin(0.5);
+
+                 // Listen for window resize events
                 this.scale.on('resize', function () {
                     // Re-position the button when the window is resized
                     updateButtonPosition();
                 });
+            }
 
             function updateButtonPosition() {
                 var centerX = game.config.width / 2;
@@ -80,17 +90,17 @@
                 button.y = centerY;
             }
 
-
             function onClick() {
-                // Shrink the button on click
-                this.tweens.add({
-                    targets: button,
-                    scaleX: 0.2,
-                    scaleY: 0.2,
-                    duration: 100,
-                    yoyo: true, // Make the tween return to its original scale after completion
-                    ease: 'Linear'
-                });
+                button.setScale(0.25);
+                score++;
+                updateScoreText();
+            }
+
+            function updateScoreText() {
+                scoreText.setText('Score: ' + score);
+            }
+                function onRelease() {
+                button.setScale(0.35);
             }
 
         </script>
