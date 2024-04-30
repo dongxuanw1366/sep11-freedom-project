@@ -49,9 +49,10 @@
             var button;
             var upgradeSection;
             var score = 0;
-            var clickingPower = 1;
+            var scoreMultiplier = 1;
             var scoreText;
             var upgradeButtons = [];
+            var upgradeCounts = {}; // Object to store upgrade counts
             var buttonWidth = 1000;
 
             // Preload assets
@@ -96,31 +97,38 @@
                 upgradeSection.add(upgradeBackground);
 
                 // Create upgrade section title
-                var upgradeTitle = this.add.text(-60, 20, 'Upgrade Shop', { fontFamily: 'Arial', fontSize: 30, color: '#ffffff' });
+                var upgradeTitle = this.add.text(-50, 10, 'Upgrade Shop', { fontFamily: 'Arial', fontSize: 30, color: '#ffffff' });
                 upgradeTitle.setOrigin(1, 0);
                 upgradeSection.add(upgradeTitle);
 
-                // Define upgrade data
+
+                // Define upgrades
                 var upgrades = [
-                        { name: 'Mouse', cost: 10 },
-                        { name: 'Humans', cost: 100 },
-                        { name: 'Robots', cost: 500 },
-                        { name: 'Gun', cost: 1000 }
-                ];
+                        { category: 'Mouse', name: 'Mouse', cost: 10, multiplier: 0.5 },
+                        { category: 'Human', name: 'Human', cost: 100, multiplier: 3 },
+                        { category: 'Robot', name: 'Robot', cost: 500, multiplier: 10 },
+                        { category: 'Gun', name: 'Gun', cost: 5000 , multiplier: 25 },
+                        { category: 'Rocket', name: 'Rocket', cost: 100000 , multiplier: 100 }
 
-                // Create upgrade buttons
-                for (var i = 0; i < 4; i++) {
-                    var upgradeButton = this.add.text(-30, 80 + 100 * i, upgrades[i].name + '\nCost: ' + upgrades[i].cost, { fontFamily: 'Arial', fontSize: 20, color: '#ffffff', wordWrap: { width: buttonWidth } });
-                    upgradeButton.setOrigin(1, 0);
-                    upgradeButton.setInteractive();
-                    upgradeButton.cost = upgrades[i].cost; // Set the cost of the upgrade
-                    upgradeButton.on('pointerdown', upgradeFunction);
-                    upgradeSection.add(upgradeButton);
-                    upgradeButtons.push(upgradeButton); // Store the upgrade buttons in an array
-                }
+                    ];
 
-                // Update the upgrade buttons with initial costs
-                updateUpgradeButtons();
+                    // Create upgrade buttons
+                    for (var i = 0; i < upgrades.length; i++) {
+                        var upgradeButton = this.add.text(-30, 80 + 130 * i, upgrades[i].name + '\nCost: ' + upgrades[i].cost, { fontFamily: 'Arial', fontSize: 25, color: '#ffffff', wordWrap: { width: 1000 } });
+                        upgradeButton.setOrigin(1, 0);
+                        upgradeButton.setInteractive();
+                        upgradeButton.upgradeData = upgrades[i]; // Store upgrade data in the button
+                        upgradeButton.on('pointerdown', function () {
+                            upgradeMultiplier(this.upgradeData);
+                        });
+                        upgradeSection.add(upgradeButton);
+                        upgradeButtons.push(upgradeButton); // Store the upgrade buttons in an array
+                        // Initialize upgrade count for this category
+                        upgradeCounts[upgrades[i].category] = 0;
+                    }
+
+                    // Update the upgrade buttons with initial costs
+                    updateUpgradeButtons();
             }
 
             function updateButtonPosition() {
@@ -133,7 +141,7 @@
             function onClick() {
                 button.setScale(0.25);
                 // Increase score by the current multiplier
-                score += clickingPower;
+                score += scoreMultiplier;
                 updateScoreText();
             }
 
@@ -141,27 +149,31 @@
                 button.setScale(0.35);
             }
 
-            function upgradeFunction() {
-                if (score >= this.cost) {
-                    clickingPower *= 1.1; // Increase clicking power
-                    score -= this.cost; // Deduct the cost from the score
-                    this.cost *= 1.5; // Increase the cost for the next upgrade
-                    updateScoreText(); // Update the score text
-                    updateUpgradeButtons(); // Update the upgrade buttons
-                }
+          function upgradeMultiplier(upgradeData) {
+            if (score >= upgradeData.cost) {
+                scoreMultiplier += upgradeData.multiplier; // Increase score multiplier
+                score -= upgradeData.cost; // Deduct the cost from the score
+                upgradeData.cost *= 1.4; // Increase the cost for the next upgrade
+                // Increment upgrade count for this category
+                upgradeCounts[upgradeData.category]++;
+                updateScoreText(); // Update the score text
+                updateUpgradeButtons(); // Update the upgrade buttons
             }
+        }
 
-            function updateUpgradeButtons() {
-                // Update the text of each upgrade button with the current cost
-                for (var i = 0; i < upgradeButtons.length; i++) {
-                    upgradeButtons[i].setText(upgradeButtons[i].text.split('\n')[0] + '\nCost: ' + upgradeButtons[i].cost);
-                }
+        function updateUpgradeButtons() {
+            // Update the text of each upgrade button with the current cost and count
+            for (var i = 0; i < upgradeButtons.length; i++) {
+                var upgradeData = upgradeButtons[i].upgradeData;
+                var category = upgradeData.category;
+                upgradeButtons[i].setText(upgradeData.name + '\nCost: ' + upgradeData.cost.toFixed(2) + ' (' + upgradeCounts[category] + ')');
             }
+        }
 
-            function updateScoreText() {
-                // Update the score text with the current score and clicking power
-                scoreText.setText('Score: ' + score.toFixed(2) + ' (Clicking Power: ' + clickingPower.toFixed(2) + ')');
-            }
+        function updateScoreText() {
+            // Update the score text with the current score and multiplier
+            scoreText.setText('Score: ' + score.toFixed(2) + ' (Multiplier: ' + scoreMultiplier + ')');
+        }
 
         </script>
     </body>
