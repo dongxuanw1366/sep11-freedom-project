@@ -47,11 +47,12 @@
 
             var game = new Phaser.Game(config);
             var button;
-            var score = 0;
-            var scoreText;
             var upgradeSection;
-            var scoreMultiplier = 1;
-
+            var score = 0;
+            var clickingPower = 1;
+            var scoreText;
+            var upgradeButtons = [];
+            var buttonWidth = 1000;
 
             // Preload assets
             function preload() {
@@ -76,7 +77,7 @@
 
 
                  // Create scoreboard
-                scoreText = this.add.text(game.config.width / 2, button.y - button.displayHeight / 2 - 20, 'Score: 0', { fontFamily: 'Courier', fontSize: 50, color: '#ffffff' });
+                scoreText = this.add.text(game.config.width / 2, button.y - button.displayHeight / 2 - 20, 'Score: 0', { fontFamily: 'Courier', fontSize: 35, color: '#ffffff' });
                 scoreText.setOrigin(0.5);
 
                  // Listen for window resize events
@@ -86,26 +87,40 @@
                 });
 
 
-
-                // Create upgrade section container
+                 // Create upgrade section container
                 upgradeSection = this.add.container(game.config.width, 0);
 
                 // Create upgrade section background
-                var upgradeBackground = this.add.rectangle(0, 0, 200, game.config.height, 0x333333);
+                var upgradeBackground = this.add.rectangle(0, 0, 300, game.config.height, 0x333333);
                 upgradeBackground.setOrigin(1, 0);
                 upgradeSection.add(upgradeBackground);
 
-                // Create upgrade section label
-                var upgradeLabel = this.add.text(-10, 20, 'Upgrade Section', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
-                upgradeLabel.setOrigin(1, 0);
-                upgradeSection.add(upgradeLabel);
+                // Create upgrade section title
+                var upgradeTitle = this.add.text(-60, 20, 'Upgrade Shop', { fontFamily: 'Arial', fontSize: 30, color: '#ffffff' });
+                upgradeTitle.setOrigin(1, 0);
+                upgradeSection.add(upgradeTitle);
+
+                // Define upgrade data
+                var upgrades = [
+                        { name: 'Mouse', cost: 10 },
+                        { name: 'Humans', cost: 100 },
+                        { name: 'Robots', cost: 500 },
+                        { name: 'Gun', cost: 1000 }
+                ];
 
                 // Create upgrade buttons
-                var upgradeButton = this.add.text(-10, 100, 'Clicking Power\nUpgrade', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
-                upgradeButton.setOrigin(1, 0);
-                upgradeButton.setInteractive();
-                upgradeButton.on('pointerdown', upgradeMultiplier);
-                upgradeSection.add(upgradeButton);
+                for (var i = 0; i < 4; i++) {
+                    var upgradeButton = this.add.text(-30, 80 + 100 * i, upgrades[i].name + '\nCost: ' + upgrades[i].cost, { fontFamily: 'Arial', fontSize: 20, color: '#ffffff', wordWrap: { width: buttonWidth } });
+                    upgradeButton.setOrigin(1, 0);
+                    upgradeButton.setInteractive();
+                    upgradeButton.cost = upgrades[i].cost; // Set the cost of the upgrade
+                    upgradeButton.on('pointerdown', upgradeFunction);
+                    upgradeSection.add(upgradeButton);
+                    upgradeButtons.push(upgradeButton); // Store the upgrade buttons in an array
+                }
+
+                // Update the upgrade buttons with initial costs
+                updateUpgradeButtons();
             }
 
             function updateButtonPosition() {
@@ -115,24 +130,37 @@
                 button.y = centerY;
             }
 
-            function upgradeMultiplier() {
-                // Increase score multiplier
-                scoreMultiplier++;
-                updateScoreText();
-            }
-
             function onClick() {
                 button.setScale(0.25);
                 // Increase score by the current multiplier
-                score += scoreMultiplier;
+                score += clickingPower;
                 updateScoreText();
             }
 
-            function updateScoreText() {
-                scoreText.setText('Score: ' + score);
-            }
-                function onRelease() {
+            function onRelease() {
                 button.setScale(0.35);
+            }
+
+            function upgradeFunction() {
+                if (score >= this.cost) {
+                    clickingPower *= 1.1; // Increase clicking power
+                    score -= this.cost; // Deduct the cost from the score
+                    this.cost *= 1.5; // Increase the cost for the next upgrade
+                    updateScoreText(); // Update the score text
+                    updateUpgradeButtons(); // Update the upgrade buttons
+                }
+            }
+
+            function updateUpgradeButtons() {
+                // Update the text of each upgrade button with the current cost
+                for (var i = 0; i < upgradeButtons.length; i++) {
+                    upgradeButtons[i].setText(upgradeButtons[i].text.split('\n')[0] + '\nCost: ' + upgradeButtons[i].cost);
+                }
+            }
+
+            function updateScoreText() {
+                // Update the score text with the current score and clicking power
+                scoreText.setText('Score: ' + score.toFixed(2) + ' (Clicking Power: ' + clickingPower.toFixed(2) + ')');
             }
 
         </script>
