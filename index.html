@@ -53,7 +53,8 @@
             var scoreText;
             var upgradeButtons = [];
             var upgradeCounts = {}; // Object to store upgrade counts
-            var buttonWidth = 1000;
+            var autoClickInterval; // Interval for auto-clicking
+
 
             // Preload assets
             function preload() {
@@ -63,7 +64,7 @@
 
             function create() {
                 // Create a button sprite
-                button = this.add.image(0, 0, 'button'); // 'button_key' should be replaced with your actual button image key
+                button = this.add.image(0, 0, 'button');
                 button.setOrigin(0.5); // Set the origin to the center of the button
                 button.setScale(0.35);
 
@@ -107,7 +108,7 @@
                         { category: 'Mouse', name: 'Mouse', cost: 10, multiplier: 0.5 },
                         { category: 'Human', name: 'Human', cost: 100, multiplier: 3 },
                         { category: 'Robot', name: 'Robot', cost: 500, multiplier: 10 },
-                        { category: 'Gun', name: 'Gun', cost: 500 , multiplier: 25 },
+                        { category: 'Gun', name: 'Gun', cost: 5000 , multiplier: 25 },
                         { category: 'Rocket', name: 'Rocket', cost: 100000 , multiplier: 100 }
 
                     ];
@@ -154,7 +155,7 @@
                 scoreMultiplier += upgradeData.multiplier; // Increase score multiplier
                 score -= upgradeData.cost; // Deduct the cost from the score
                 upgradeData.cost *= 1.4; // Increase the cost for the next upgrade
-                // Increment upgrade count for this category
+                // Increment upgrade count for the clicked category only
                 upgradeCounts[upgradeData.category]++;
                 updateScoreText(); // Update the score text
                 updateUpgradeButtons(); // Update the upgrade buttons
