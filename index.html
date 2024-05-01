@@ -53,8 +53,7 @@
             var scoreText;
             var upgradeButtons = [];
             var upgradeCounts = {}; // Object to store upgrade counts
-            var autoClickInterval; // Interval for auto-clicking
-
+            var autoClickTimer; // Timer for auto-clicking
 
             // Preload assets
             function preload() {
@@ -92,6 +91,8 @@
                  // Create upgrade section container
                 upgradeSection = this.add.container(game.config.width, 0);
 
+                specialArea = this.add.container(0, 0);
+
                 // Create upgrade section background
                 var upgradeBackground = this.add.rectangle(0, 0, 300, game.config.height, 0x333333);
                 upgradeBackground.setOrigin(1, 0);
@@ -108,7 +109,7 @@
                         { category: 'Mouse', name: 'Mouse', cost: 10, multiplier: 0.5 },
                         { category: 'Human', name: 'Human', cost: 100, multiplier: 3 },
                         { category: 'Robot', name: 'Robot', cost: 500, multiplier: 10 },
-                        { category: 'Gun', name: 'Gun', cost: 5000 , multiplier: 25 },
+                        { category: 'Gun', name: 'Gun', cost: 5000, multiplier: 25 },
                         { category: 'Rocket', name: 'Rocket', cost: 100000 , multiplier: 100 }
 
                     ];
@@ -127,6 +128,16 @@
                         // Initialize upgrade count for this category
                         upgradeCounts[upgrades[i].category] = 0;
                     }
+
+                    // Create auto-clicking area
+                    var autoClickArea = this.add.rectangle(100, game.config.height / 2, 200, game.config.height, 0x666666);
+                    autoClickArea.setOrigin(0, 0.5);
+                    autoClickArea.setInteractive();
+                    autoClickArea.on('pointerdown', function () {
+                        startAutoClick();
+                    });
+                    specialArea.add(autoClickArea);
+
 
                     // Update the upgrade buttons with initial costs
                     updateUpgradeButtons();
@@ -160,6 +171,17 @@
                 updateScoreText(); // Update the score text
                 updateUpgradeButtons(); // Update the upgrade buttons
             }
+        }
+
+        function startAutoClick() {
+            autoClickTimer = this.time.addEvent({
+                delay: 1000, // Auto-click every 1000 milliseconds (1 second)
+                callback: function () {
+                    score += scoreMultiplier;
+                    updateScoreText();
+                },
+                loop: true // Repeat the auto-clicking indefinitely
+            });
         }
 
         function updateUpgradeButtons() {
