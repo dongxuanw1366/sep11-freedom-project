@@ -109,8 +109,8 @@
                         { category: 'Mouse', name: 'Mouse', cost: 10, multiplier: 0.5 },
                         { category: 'Human', name: 'Human', cost: 100, multiplier: 3 },
                         { category: 'Robot', name: 'Robot', cost: 500, multiplier: 10 },
-                        { category: 'Gun', name: 'Gun', cost: 5000, multiplier: 25 },
-                        { category: 'Rocket', name: 'Rocket', cost: 100000 , multiplier: 100 }
+                        { category: 'Gun', name: 'Gun', cost: 5000, multiplier: 50 },
+                        { category: 'Rocket', name: 'Rocket', cost: 100000 , multiplier: 500 }
 
                     ];
 
@@ -129,14 +129,15 @@
                         upgradeCounts[upgrades[i].category] = 0;
                     }
 
-                    // Create auto-clicking area
-                    var autoClickArea = this.add.rectangle(100, game.config.height / 2, 200, game.config.height, 0x666666);
-                    autoClickArea.setOrigin(0, 0.5);
-                    autoClickArea.setInteractive();
-                    autoClickArea.on('pointerdown', function () {
-                        startAutoClick();
+                    // Create auto-clicking functionality
+                    autoClickTimer = this.time.addEvent({
+                        delay: 1000, // Auto-click every 1000 milliseconds (1 second)
+                        callback: function () {
+                            score += scoreMultiplier;
+                            updateScoreText();
+                        },
+                        loop: true // Repeat the auto-clicking indefinitely
                     });
-                    specialArea.add(autoClickArea);
 
 
                     // Update the upgrade buttons with initial costs
@@ -161,6 +162,22 @@
                 button.setScale(0.35);
             }
 
+
+
+            function formatNumber(number) {
+                if (number >= 1000000000000) {
+                    return (number / 1000000000000).toFixed(2) + ' QA';
+                } else if (number >= 1000000000) {
+                    return (number / 1000000000).toFixed(2) + ' T';
+                } else if (number >= 1000000) {
+                    return (number / 1000000).toFixed(2) + ' M';
+                } else if (number >= 1000) {
+                    return (number / 1000).toFixed(2) + ' K';
+                } else {
+                    return number.toFixed(2);
+                }
+            }
+
           function upgradeMultiplier(upgradeData) {
             if (score >= upgradeData.cost) {
                 scoreMultiplier += upgradeData.multiplier; // Increase score multiplier
@@ -173,15 +190,10 @@
             }
         }
 
-        function startAutoClick() {
-            autoClickTimer = this.time.addEvent({
-                delay: 1000, // Auto-click every 1000 milliseconds (1 second)
-                callback: function () {
-                    score += scoreMultiplier;
-                    updateScoreText();
-                },
-                loop: true // Repeat the auto-clicking indefinitely
-            });
+
+       function updateScoreText() {
+            // Update the score text with the current score and multiplier
+            scoreText.setText('Score: ' + formatNumber(score) + ' (Multiplier: ' + formatNumber(scoreMultiplier) + ')');
         }
 
         function updateUpgradeButtons() {
@@ -189,13 +201,8 @@
             for (var i = 0; i < upgradeButtons.length; i++) {
                 var upgradeData = upgradeButtons[i].upgradeData;
                 var category = upgradeData.category;
-                upgradeButtons[i].setText(upgradeData.name + '\nCost: ' + upgradeData.cost.toFixed(2) + ' (' + upgradeCounts[category] + ')');
+                upgradeButtons[i].setText(upgradeData.name + '\nCost: ' + formatNumber(upgradeData.cost) + ' (' + formatNumber(upgradeCounts[category]) + ')');
             }
-        }
-
-        function updateScoreText() {
-            // Update the score text with the current score and multiplier
-            scoreText.setText('Score: ' + score.toFixed(2) + ' (Multiplier: ' + scoreMultiplier + ')');
         }
 
         </script>
