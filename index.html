@@ -1,184 +1,187 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="style.css" rel="stylesheet" type="text/css" />
-        <script src="https://cdn.jsdelivr.net/npm/phaser@3.54.0/dist/phaser.min.js"></script>
-        <style>
-            /* CSS */
-            body, html {
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                width: 100%;
-                height: 100%;
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+
+    <!-- Phaser CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.54.0/dist/phaser.min.js"></script>
+
+    <style>
+        /* CSS */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        #game-container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <title>Title</title>
+</head>
+<body>
+    <!-- HTML -->
+    <div id="game-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Initialize Phaser game
+        var config = {
+            type: Phaser.AUTO,
+            parent: 'game-container', // Parent element ID
+            width: window.innerWidth, // Set canvas width to match window width
+            height: window.innerHeight, // Set canvas height to match window height
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
             }
-            #game-container {
-                width: 100%;
-                height: 100%;
-            }
-        </style>
+        };
 
-        <title>Title</title>
-    </head>
-    <body>
-        <!-- HTML -->
-        <div id="game-container"></div>
+        var game = new Phaser.Game(config);
+        var button;
+        var score = 0;
+        var scoreMultiplier = 1;
+        var scoreText;
+        var upgradeButtons = []; // array to store upgrade buttons
+        var upgradeCounts = {}; // Object to store upgrade counts
+        var autoClickTimer; // Timer for auto-clicking
+        var lastClickTime = 0;
+        var cps = 0; // tracks the click per second
+        var keySpace;
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- <script src="script.js"></script> -->
-        <script>
-            // JS
-            // Initialize Phaser game
-            var config = {
-                type: Phaser.AUTO,
-                parent: 'game-container', // Parent element ID
-                width: window.innerWidth, // Set canvas width to match window width
-                height: window.innerHeight, // Set canvas height to match window height
-                scene: {
-                    preload: preload,
-                    create: create
-                }
-            };
+        // Preload assets
+        function preload() {
+            this.load.image('button', 'images/gold-button.png');
+        }
 
-            var game = new Phaser.Game(config);
-            var button;
-            var upgradeSection;
-            var score = 0;
-            var scoreMultiplier = 1;
-            var scoreText;
-            var upgradeButtons = [];
-            var upgradeCounts = {}; // Object to store upgrade counts
-            var autoClickTimer; // Timer for auto-clicking
+        function create() {
+            this.cameras.main.setBackgroundColor('#2b2b2b'); // Dark gray background color
 
-            // Preload assets
-            function preload() {
-                this.load.image('button', 'images/gold-button.png');
-            }
+            // Create a button sprite
+            button = this.add.image(0, 0, 'button');
+            button.setOrigin(0.5); // Set the origin to the center of the button
+            button.setScale(0.35);
 
+            // Position the button initially
+            updateButtonPosition();
 
-            function create() {
-                // Create a button sprite
-                button = this.add.image(0, 0, 'button');
-                button.setOrigin(0.5); // Set the origin to the center of the button
-                button.setScale(0.35);
+            // Add pointer events to the button
+            button.setInteractive();
+            button.on('pointerdown', onClick);
+            button.on('pointerup', onRelease);
 
-                // Position the button initially
+            // Create scoreboard
+            scoreText = this.add.text(game.config.width / 2, button.y - button.displayHeight / 2 - 20, 'Score: 0', { fontFamily: 'Courier', fontSize: 35, color: '#ffffff' });
+            scoreText.setOrigin(0.5);
+
+            // Create CPS tracker text
+            cpsText = this.add.text(game.config.width / 2, button.y + button.displayHeight / 2 + 20, 'CPS: 0', { fontFamily: 'Courier', fontSize: 25, color: '#ffffff' });
+            cpsText.setOrigin(0.5);
+
+            // when window resizes it changes the position
+            this.scale.on('resize', function () {
+                // Re-position the button when the window is resized
                 updateButtonPosition();
+            });
 
-                // Add pointer events to the button
-                button.setInteractive();
-                button.on('pointerdown', onClick);
-                button.on('pointerup', onRelease);
+            // Create upgrade section container
+            upgradeSection = this.add.container(game.config.width, 0);
 
+            // Define upgrades
+            var upgrades = [
+                { category: 'Mouse', name: 'Mouse', cost: 10, multiplier: 0.5 },
+                { category: 'Human', name: 'Human', cost: 100, multiplier: 3 },
+                { category: 'Robot', name: 'Robot', cost: 500, multiplier: 10 },
+                { category: 'Gun', name: 'Gun', cost: 5000, multiplier: 50 },
+                { category: 'Rocket', name: 'Rocket', cost: 100000 , multiplier: 500 }
+            ];
 
-
-                 // Create scoreboard
-                scoreText = this.add.text(game.config.width / 2, button.y - button.displayHeight / 2 - 20, 'Score: 0', { fontFamily: 'Courier', fontSize: 35, color: '#ffffff' });
-                scoreText.setOrigin(0.5);
-
-                 // Listen for window resize events
-                this.scale.on('resize', function () {
-                    // Re-position the button when the window is resized
-                    updateButtonPosition();
+            // Create upgrade buttons
+            for (var i = 0; i < upgrades.length; i++) {
+                var upgradeButton = this.add.text(-30, 80 + 130 * i, upgrades[i].name + '\nCost: ' + formatNumber(upgrades[i].cost), { fontFamily: 'Arial', fontSize: 25, color: '#ffffff', wordWrap: { width: 1000 } });
+                upgradeButton.setOrigin(1, 0);
+                upgradeButton.setInteractive();
+                upgradeButton.upgradeData = upgrades[i]; // Store upgrade data in the button
+                upgradeButton.on('pointerdown', function () {
+                    upgradeMultiplier(this.upgradeData);
                 });
-
-
-                 // Create upgrade section container
-                upgradeSection = this.add.container(game.config.width, 0);
-
-                specialArea = this.add.container(0, 0);
-
-                // Create upgrade section background
-                var upgradeBackground = this.add.rectangle(0, 0, 300, game.config.height, 0x333333);
-                upgradeBackground.setOrigin(1, 0);
-                upgradeSection.add(upgradeBackground);
-
-                // Create upgrade section title
-                var upgradeTitle = this.add.text(-50, 10, 'Upgrade Shop', { fontFamily: 'Arial', fontSize: 30, color: '#ffffff' });
-                upgradeTitle.setOrigin(1, 0);
-                upgradeSection.add(upgradeTitle);
-
-
-                // Define upgrades
-                var upgrades = [
-                        { category: 'Mouse', name: 'Mouse', cost: 10, multiplier: 0.5 },
-                        { category: 'Human', name: 'Human', cost: 100, multiplier: 3 },
-                        { category: 'Robot', name: 'Robot', cost: 500, multiplier: 10 },
-                        { category: 'Gun', name: 'Gun', cost: 5000, multiplier: 50 },
-                        { category: 'Rocket', name: 'Rocket', cost: 100000 , multiplier: 500 }
-
-                    ];
-
-                    // Create upgrade buttons
-                    for (var i = 0; i < upgrades.length; i++) {
-                        var upgradeButton = this.add.text(-30, 80 + 130 * i, upgrades[i].name + '\nCost: ' + upgrades[i].cost, { fontFamily: 'Arial', fontSize: 25, color: '#ffffff', wordWrap: { width: 1000 } });
-                        upgradeButton.setOrigin(1, 0);
-                        upgradeButton.setInteractive();
-                        upgradeButton.upgradeData = upgrades[i]; // Store upgrade data in the button
-                        upgradeButton.on('pointerdown', function () {
-                            upgradeMultiplier(this.upgradeData);
-                        });
-                        upgradeSection.add(upgradeButton);
-                        upgradeButtons.push(upgradeButton); // Store the upgrade buttons in an array
-                        // Initialize upgrade count for this category
-                        upgradeCounts[upgrades[i].category] = 0;
-                    }
-
-                    // Create auto-clicking functionality
-                    autoClickTimer = this.time.addEvent({
-                        delay: 1000, // Auto-click every 1000 milliseconds (1 second)
-                        callback: function () {
-                            score += scoreMultiplier;
-                            updateScoreText();
-                        },
-                        loop: true // Repeat the auto-clicking indefinitely
-                    });
-
-
-                    // Update the upgrade buttons with initial costs
-                    updateUpgradeButtons();
+                upgradeSection.add(upgradeButton);
+                upgradeButtons.push(upgradeButton); // Store the upgrade buttons in an array
+                // Initialize upgrade count for this category
+                upgradeCounts[upgrades[i].category] = 0;
             }
 
-            function updateButtonPosition() {
-                var centerX = game.config.width / 2;
-                var centerY = game.config.height / 2;
-                button.x = centerX;
-                button.y = centerY;
+            // Create auto-clicking functionality
+            autoClickTimer = this.time.addEvent({
+                delay: 1000, // Auto-click every 1000 milliseconds (1 second)
+                callback: function () {
+                    score += scoreMultiplier;
+                    updateScoreText();
+                },
+                loop: true // Repeat the auto-clicking infinitely
+            });
+
+            // Create keyboard input for clicking (uses the spacebar)
+            keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        }
+
+        // updates position based on the canvas height and width
+        function updateButtonPosition() {
+            var centerX = game.config.width / 2;
+            var centerY = game.config.height / 2;
+            button.x = centerX;
+            button.y = centerY;
+        }
+
+        function onClick() {
+            button.setScale(0.25); // button gets smaller when it is clicked
+            var currentTime = new Date().getTime();
+            if (currentTime - lastClickTime < 1000) { // this doesn't work properly
+                cps++;
+            } else {
+                cps = 1;
             }
+            lastClickTime = currentTime;
+            // Increase score by the current multiplier
+            score += scoreMultiplier;
+            updateScoreText();
+        }
 
-            function onClick() {
-                button.setScale(0.25);
-                // Increase score by the current multiplier
-                score += scoreMultiplier;
-                updateScoreText();
+        function onRelease() {
+            button.setScale(0.35); //button goes back to normal
+        }
+
+
+        // formats number based on your digit call the number in abreviations. 1T is 1 trillion, 1B is 1 billion
+        function formatNumber(number) {
+            if (number >= 1000000000000) {
+                return (number / 1000000000000).toFixed(2) + ' T';
+            } else if (number >= 1000000000) {
+                return (number / 1000000000).toFixed(2) + ' B';
+            } else if (number >= 1000000) {
+                return (number / 1000000).toFixed(2) + ' M';
+            } else if (number >= 1000) {
+                return (number / 1000).toFixed(2) + ' K';
+            } else {
+                return number.toFixed(2);
             }
-
-            function onRelease() {
-                button.setScale(0.35);
-            }
+        }
 
 
-
-            function formatNumber(number) {
-                if (number >= 1000000000000) {
-                    return (number / 1000000000000).toFixed(2) + ' QA';
-                } else if (number >= 1000000000) {
-                    return (number / 1000000000).toFixed(2) + ' T';
-                } else if (number >= 1000000) {
-                    return (number / 1000000).toFixed(2) + ' M';
-                } else if (number >= 1000) {
-                    return (number / 1000).toFixed(2) + ' K';
-                } else {
-                    return number.toFixed(2);
-                }
-            }
-
-          function upgradeMultiplier(upgradeData) {
+        function upgradeMultiplier(upgradeData) {
             if (score >= upgradeData.cost) {
                 scoreMultiplier += upgradeData.multiplier; // Increase score multiplier
                 score -= upgradeData.cost; // Deduct the cost from the score
@@ -190,10 +193,11 @@
             }
         }
 
-
-       function updateScoreText() {
+        function updateScoreText() {
             // Update the score text with the current score and multiplier
             scoreText.setText('Score: ' + formatNumber(score) + ' (Multiplier: ' + formatNumber(scoreMultiplier) + ')');
+            // Update CPS text
+            cpsText.setText('CPS: ' + cps);
         }
 
         function updateUpgradeButtons() {
@@ -205,6 +209,13 @@
             }
         }
 
-        </script>
-    </body>
+        function update() {
+            // Handle keyboard input (Space bar)
+            if (Phaser.Input.Keyboard.JustDown(keySpace)) {
+                onClick();
+            }
+        }
+
+    </script>
+</body>
 </html>
