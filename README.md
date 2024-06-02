@@ -14,9 +14,16 @@ For my project, I chose to independently study **Phaser** in order to help me ma
 
 ## Implications
 ##### PROS
-* 
+* Provides a simple form of entertainment and stress relief.
+* Gives you quick decision-making skills and time management.
+* Contributes to the growth of gaming culture and communities.
+* Creates job opportunities in game development, marketing, and support.
+* Provides a topic of conversation and bonding for gaming communities.
 ##### CONS
-* 
+* May reduce productivity in daily life tasks.
+* Risk of addiction and excessive screen time.
+* Might create sterotypes
+* Encourages spending on game item which might not have real-world value.
 
 
 ## Blog
